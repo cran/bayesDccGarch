@@ -1,0 +1,3 @@
+import(coda)
+export(dssnorm,dssged,dsst,bayesDccGarch,increaseSim,logLikDccGarch,plotVol)
+useDynLib(bayesDccGarch)
