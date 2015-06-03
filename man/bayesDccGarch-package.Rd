@@ -7,16 +7,17 @@
 }
 
 \description{
-	In this package we implemented functions for Bayesian analysis of DCC-GARCH(1,1) Model using the same modelling of Fioruci et al (2014). 
-	Several probabilities distributions are available for the errors which can model both skewness and heavy tails.
+	In this package we implemented functions for Bayesian analysis of DCC-GARCH(1,1) Model using the same modelling of Fioruci et al (2014a). 
+	Several probabilities distributions are available for the errors which can model both skewness and heavy tails. 
+	See Fioruci et al (2014b) for more details about the package.
 }
 
 \details{
 	\tabular{ll}{
 		Package: \tab bayesDccGarch\cr
 		Type: \tab Package\cr
-		Version: \tab 1.0\cr
-		Date: \tab 2014-10-30\cr
+		Version: \tab 1.1\cr
+		Date: \tab 2015-05-29\cr
 		License: \tab GPL (>=2.14) \cr
     }
 	
@@ -29,7 +30,10 @@
 	Maintainer: Jose Augusto Fioruci <jafioruci@gmail.com> and Ricardo Sandes Ehlers <ehlers@icmc.usp.br>
 }
 
-\references{Fioruci, J.A., Ehlers, R.S. Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+\references{
+Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014a. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+
+Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation of Multivariate GARCH DCC Models}, ArXiv e-prints, 2014b. \url{http://adsabs.harvard.edu/abs/2014arXiv1412.2967F}.
 }
 
 \keyword{ package }
@@ -42,8 +46,7 @@
 Available functions:
 \code{\link{bayesDccGarch}}, \code{\link{logLikDccGarch}}, \code{\link{dssnorm}}, \code{\link{dsst}}, \code{\link{dssged}}, \code{\link{plotVol}}
 
-For classical estimation see:
-\code{\link[ccgarch]{dcc.estimation}}
+For classical estimation see \emph{Package ccgarch}.
 }
 
 \examples{

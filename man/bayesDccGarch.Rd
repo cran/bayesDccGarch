@@ -36,7 +36,7 @@ increaseSim(outList, nSim=10000)
 \details{
 The \code{bayesDccGarch} performs a Markov Chain for all parameters of the model DCC-GARCH(1,1) (or GARCH(1,1) in the univariate case). 
 There are three options of probability distributions for the error
-component. These are the standardized skew versions of normal, t-student and ged distributions. See Fioruci et al (2014) for any detail.
+component. These are the standardized skew versions of normal, t-student and ged distributions. See Fioruci et al (2014a) and Fioruci et al (2014b) for any detail.
  
 The \code{control} argument can be used for define the prior hyper-parameters and the simulation algorithm parameters.  
 It is a list that can supply any of the following components:
@@ -59,9 +59,9 @@ It is a list that can supply any of the following components:
   \item{$simAlg}{the random walk Metropolis-Hasting algorithm update. Use \code{1} for update all parameters as one block, 
   use \code{2} for update one parameter for each time and use \code{3} for an automatic choice.}
   \item{$cholCov}{the cholesky decomposition matrix of the covariance matrix for simulation by one-block Metropolis-Hasting. It must to be passed if \code{control$simAlg=1}.}
-  \item{$sdSim}{an vector with the standard deviations for simulation by one-dimensional Metropolis-Hasting. It must to be passed if \code{control$simAlg=2}.}
+  \item{$sdSim}{a vector with the standard deviations for simulation by one-dimensional Metropolis-Hasting. It must to be passed if \code{control$simAlg=2}.}
   
-  \item{$print}{an logical variable for if the function should report the number of interactions in each 100 interactions or not. Default: TRUE} 
+  \item{$print}{a logical variable for if the function should report the number of interactions in each 100 interactions or not. Default: TRUE} 
   }
 }
 
@@ -74,7 +74,10 @@ A list with elements:
 \item{$elapsedTime }{ an object of class \code{proc_time} which is a numeric vector of length 5, containing the user, system, and total elapsed times of the process.}
 }
 
-\references{Fioruci, J.A., Ehlers, R.S. Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+\references{
+Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014a. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+
+Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation of Multivariate GARCH DCC Models}, ArXiv e-prints, 2014b. \url{http://adsabs.harvard.edu/abs/2014arXiv1412.2967F}.
 }
 
 \author{Jose Augusto Fioruci, Ricardo Sandes Ehlers and Francisco Louzada}

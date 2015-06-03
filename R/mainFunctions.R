@@ -145,26 +145,29 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
     # .C("printGrobalMatrix")
     
 	if( control$simAlg == 3 ){ 
-		writeLines("\nMaximizing the log-posterior density function")
+		writeLines("Maximizing the log-posterior density function.")
 		if(k==1) phi_ini = phi_ini[1:5]
 		opt = optim(par = phi_ini, fn = logPosterior_phi, hessian=TRUE, control = list(fnscale=-1))
 		if(k==1) phi_ini = c(phi_ini,-2,1)
 		
-		if(opt$convergence){
-			writeLines("\nFinished.")
+		if(opt$convergence==0 || opt$convergence==1){
+			writeLines("Done.")
 			phi_ini = opt$par
 			if(k==1) phi_ini = c(phi_ini,-2,1)
 			
 			control$cholCov = try( t( chol( solve( -opt$hessian ) ) ) , silent = TRUE )
+			if( class(control$cholCov) == "try-error"){
+				control$cholCov = try( t( chol( solve( -hessian(func=logPosterior_phi, x=opt$par) ) ) ) , silent = TRUE )
+			}
 			
 			if( class(control$cholCov) != "try-error"){
 				option = 1
 			}else{
-				writeLines("\nThe approximated hessian matrix is not positive definitely.\n")   
+				writeLines("The approximated hessian matrix is not positive definitely.")   
 				option = 2
 			}
 		}else{
-			writeLines("\nThe optim function convergence was not obtained.\n")
+			writeLines("The optim function convergence was not obtained.")
 			option = 2
 		}
 	}
@@ -175,7 +178,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
             #writeLines("\nStarting the first simulation option")
 			
 			if(control$simAlg==3){
-				writeLines("\nCalibrating the Lambda coefficient:")
+				writeLines("Calibrating the Lambda coefficient:")
 				
 				cont=1
 				proceed=TRUE
@@ -193,12 +196,12 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 					}   
 				}
 				
-				writeLines("\nFinished.\n")
+				writeLines("Done.")
             }
 			
-            writeLines("\n\nStarting the simulation by one-block random walk Metropolis-Hasting algorithm.")
+            writeLines("Starting the simulation by one-block random walk Metropolis-Hasting algorithm.")
             MC_phi = MH_oneBlock(phi_ini, k, n_sim=nSim, control$lambda*control$cholCov)  
-            writeLines("\nFinished.\n")
+            writeLines("Done.")
             break
         }   
     
@@ -206,7 +209,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
             #writeLines("\nStarting the second simulation option.")
            
 			if(control$simAlg == 3){
-				writeLines("\nCalibrating the standard deviations for simulation:")
+				writeLines("Calibrating the standard deviations for simulation:")
 				
 				proceed=TRUE
 				cont=1
@@ -233,22 +236,22 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 					MC_phi[,1] = rnorm(control$nPilotSim)
 				}
 				
-				writeLines("\nComputing the covariance matrix of pilot sample.")
+				writeLines("Computing the covariance matrix of pilot sample.")
 				control$cholCov = try( t( chol( cov(MC_phi) ) ) , silent = TRUE )
 				if( class(control$cholCov) != "try-error"){
-					writeLines("\nFinished.\n")
+					writeLines("Done.")
 					option = 1
 				}else{
 					control$cholCov = NULL
-					writeLines("\nThe approximately covariance matrix is not positive definitely.\n")
+					writeLines("The approximately covariance matrix is not positive definitely.")
 					option = 2
 				}
             }
 			
 			if(option == 2){
-				writeLines("\n\nStarting the simulation by one-dimensional random walk Metropolis-Hasting algorithm.")
+				writeLines("Starting the simulation by one-dimensional random walk Metropolis-Hasting algorithm.")
 				MC_phi = MH_oneDimension(phi_ini, k=k, n_sim=nSim, sd_phi_sim=control$sdSim)
-				writeLines("\n Finished.\n")
+				writeLines("Done.")
 				break
 			}
 			
@@ -369,37 +372,9 @@ plotVol <- function(mY, vol, ts.names=paste("TS_", 1:ncol(mY), sep=""), colors =
   
   par(mfrow=c(k,1), mar= c(4, 4, 2, 2))
   for(i in 1:k){
-    ts.plot(abs(mY[,i]),type='h',ylab=paste("|returns| of ",ts.names[i], sep=""),col=colors[1], ...)
+	ylim = c(0, c(max(c(abs(mY[,i]), vol[,i]) )) )
+    ts.plot(abs(mY[,i]),type='h',ylab=paste("|returns| of ",ts.names[i], sep=""), ylim=ylim, col=colors[1], ...)
     lines(vol[,i],col=colors[2]) #lines(exp(vol[,i]/2),col="red")
   }
 }
 
-
-# estVol <- function(mY, MC, plot=TRUE){
-  # n = nrow(mY)
-  # k = ncol(mY)
-  # nMC = nrow(MC)
-  
-  # mEstVol = matrix(NA, n, k)
-  
-  # for(i in 1:k){
-	# omega_i = MC[,3+(i-1)*4]
-    # alpha_i = MC[,4+(i-1)*4]
-	# beta_i  = MC[,5+(i-1)*4]
-	# mean_h = numeric(n)
-	# for(j in 1:nMC){
-	  # h_ijt = omega_i[j] #h_ij0 = omega_ij
-	  # mean_h[1] = mean_h[1]+ h_ijt 
-      # for(tt in 2:n){
-	    # h_ijt = omega_i[j] + alpha_i[j]*(mY[tt-1,i]^2) + beta_i[j]*h_ijt
-		# mean_h[tt] = mean_h[tt] + h_ijt
-	  # }
-	# }
-	# mean_h = mean_h/nMC
-	# mEstVol[,i] = mean_h 
-  # }
-  
-  # if(plot){ plot.vol(mY, mEstVol) }
-
-  # return(mEstVol)		
-# } 

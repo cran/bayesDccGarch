@@ -1,0 +1,7 @@
+Version 1.1 (29 May 2015)
+  * Fixed a bug in bayesDccGarch()	
+  * New reference included.
+  * Fixed a bug with y-aixs in plotVol().
+  * Package Description updated.
+
+Version 1.0 (30 November 2014)

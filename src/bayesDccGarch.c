@@ -624,7 +624,7 @@ void MH_oneDimension(double *phi,
 	s=0;
 	while(s < *n_sim){
 		
-		if((s+1)%100 == 0 && print==1) Rprintf("\nSimulation number = %d\n", s+1);
+		if((s+1)%100 == 0 && print==1) Rprintf("Simulation number = %d\n", s+1);
 		
 		if(errorDist==1){ start=1; vMC[i_vMC]=log(2.0); i_vMC++; } 
 		
@@ -746,7 +746,7 @@ void MH_oneBlock( double *phi,
 	s=0;
 	while(s < *n_sim){
 		
-		if((s+1)%100 == 0 && print==1) Rprintf("\nSimulation number = %d\n", s+1);
+		if((s+1)%100 == 0 && print==1) Rprintf("Simulation number = %d\n", s+1);
 				
 		rMultNorm(phi, Chol_Cov_phi_sim, phi_new, n_par);
 		
