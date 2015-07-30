@@ -1,7 +1,12 @@
+Version 1.2 (29 Jul 2015)
+  * NAMESPACE updated;
+  * Examples updated;
+  * Fixed a bug with "Exception handling" in plotVol();
+
 Version 1.1 (29 May 2015)
-  * Fixed a bug in bayesDccGarch()	
-  * New reference included.
-  * Fixed a bug with y-aixs in plotVol().
-  * Package Description updated.
+  * Fixed a bug in bayesDccGarch();	
+  * New reference included;
+  * Fixed a bug with y-aixs in plotVol();
+  * Package Description updated;
 
 Version 1.0 (30 November 2014)

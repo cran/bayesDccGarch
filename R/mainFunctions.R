@@ -363,7 +363,7 @@ plotVol <- function(mY, vol, ts.names=paste("TS_", 1:ncol(mY), sep=""), colors =
   if (any(is.na(vol))) stop ("'vol' contains 'NA' values.")
   mY=as.matrix(mY)
   vol=as.matrix(vol)
-  if(!any(dim(mY) == dim(vol))) stop ("the dimensions of 'mY' and 'vol' arguments are not the same.")  
+  if(!all(dim(mY) == dim(vol))) stop ("the dimensions of 'mY' and 'vol' arguments are not the same.")  
   if (ncol(mY) != length(ts.names)) stop ("the number of columns of 'ts.name' is different of length of 'ts.name'.")
   
   n = nrow(mY)

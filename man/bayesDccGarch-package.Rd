@@ -54,11 +54,11 @@ For classical estimation see \emph{Package ccgarch}.
 data(DaxCacNik)
 
 mY = DaxCacNik[1:10,] # more data is necessary
-Dax = mY[,1]
+Dax = DaxCacNik[,1]
 
 ### DCC-GARCH(1,1) ###
- out = bayesDccGarch(mY, nSim=1000)
- summary(out$MC)
+out = bayesDccGarch(mY, nSim=1000)
+summary(out$MC)
 
 
 ### GARCH(1,1) ###

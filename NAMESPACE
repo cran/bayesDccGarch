@@ -1,3 +1,5 @@
+importFrom("graphics", "lines", "par")
+importFrom("stats", "cov", "optim", "rnorm", "ts.plot")
 importFrom("numDeriv","hessian")
 import(coda)
 export(dssnorm,dssged,dsst,bayesDccGarch,increaseSim,logLikDccGarch,plotVol)
