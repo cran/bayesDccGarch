@@ -395,15 +395,92 @@ void logLikelihood_R(double *vY, double *omega, double *alpha, double *beta,
 }
 
 
+/*
+	Input: one markov chain for parameters
+	Output: loglikelihood mean (also update the mean H)
+	Arguments:
+		mcmc: matrix of parameters (original scale)
+		n_mcmc: number of lines of mcmc
+*/
+double loglike_matrix(double **mcmc, int n_mcmc){
+	int i,j;
+	double meanLogLike, *gamma, *omega, *alpha, *beta, a, b, tail;
+
+	gamma=vec_new(n_mcmc); omega=vec_new(n_mcmc); alpha=vec_new(n_mcmc); beta=vec_new(n_mcmc);
+	
+	matrix_zero(mMeanH, n, k*k);
+	matrix_zero(mH, n, k*k);
+	
+	meanLogLike = 0.0;
+	for(j=0; j<n_mcmc; j++){
+		
+		tail = mcmc[j][0];
+	
+		for(i=1; i<=k; i++){
+			gamma[i-1] = mcmc[j][4*(i-1)+1];
+			omega[i-1] = mcmc[j][4*(i-1)+2];
+			alpha[i-1] = mcmc[j][4*(i-1)+3];
+			beta[i-1] = mcmc[j][4*i];
+		}
+		
+		a = mcmc[j][4*k +1];
+		b = mcmc[j][4*k +2];
+			
+		meanLogLike += logLikelihood(omega, alpha, beta, a, b, gamma, tail) / ((double) n_mcmc );
+		matrix_sum(mMeanH, mMeanH, mH, n, k*k);
+	}
+	
+	matrix_mult_cte(mMeanH, mMeanH, 1.0/((double) n_mcmc), n, k*k);
+	
+	vec_del(gamma); vec_del(omega); vec_del(alpha); vec_del(beta);
+	
+	return( meanLogLike );
+}
+
+void loglike_matrix_R(double *vY, int *vn, int *vk, double *vmcmc, int *n_mcmc, int *verrorDist, double *meanLogLike, double *vmMeanH){	
+	double **mcmc;
+	n = vn[0];
+	k = vk[0];
+	errorDist = verrorDist[0];
+	
+	H=mat_new(k);  Q=mat_new(k); R=mat_new(k); 
+	cholH=mat_new(k);
+	cholH1=mat_new(k); //Cholesky decomposition of H1	
+	matrix_new(k, n, &MEs); //allocation of errors matrix (Note that the order is k X n )
+	
+	matrix_new(n, k, &y); // allocation of the data matrix
+	vector_to_matriz(n, k, vY, y);
+	
+	matrix_new(n_mcmc[0], (4*k) +3, &mcmc);
+	vector_to_matriz(n_mcmc[0], (4*k) +3, vmcmc, mcmc);
+	
+	matrix_new(n, k*k, &mH); // matrix to save the H_t's for t=1,...,n 
+	matrix_new(n, k*k, &mMeanH); // matrix to save the mean of H_t's for t=1,...,n 
+	
+	meanLogLike[0] = loglike_matrix(mcmc, n_mcmc[0]);
+	
+	//RprintMatrix(n, k*k, mMeanH);
+	
+	matrix_to_vector(n, k*k, mMeanH, vmMeanH);
+	
+	_del(mcmc);
+	_del(H); _del(Q); _del(R); _del(cholH); 
+	_del(cholH1);	
+	_del(MEs);
+	_del(mH); _del(mMeanH);
+	_del(y);
+}
+
+
 double logPosterior(double *omega, double *alpha, double *beta, double a, double b, double *gamma, double tail){
 	int i;
 	double logLik, logPrior=0.0;
 	
 	double Inf = 999999999999999999;
 	
-	if(a+b>0.999) return -Inf;
+	if(a+b>0.989) return -Inf;
 	for(i = 0; i < k; i++)
-		if(alpha[i]+beta[i]>0.999) return -Inf;
+		if(alpha[i]+beta[i]>0.989) return -Inf;
 	
 	
 	logLik = logLikelihood(omega, alpha, beta, a, b, gamma, tail);
@@ -662,6 +739,8 @@ void MH_oneDimension(double *phi,
 	}
 	
 	matrix_mult_cte(mMeanH, mMeanH, 1.0/((double) n_sim[0]), n, k*k);
+	
+	//RprintMatrix(n, k*k, mMeanH);
 	
 	// ****************** memory deallocation *************** //
 	_del(mH_actual);

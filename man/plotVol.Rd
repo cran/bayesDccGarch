@@ -27,9 +27,9 @@ Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. \emph{Bayesian multivariate GAR
 Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation of Multivariate GARCH DCC Models}, ArXiv e-prints, 2014b. \url{http://adsabs.harvard.edu/abs/2014arXiv1412.2967F}.
 }
 
-\author{Ricardo Sandes Ehlers, Jose Augusto Fioruci and Francisco Louzada}
+\author{Ricardo Sandes Ehlers, Jose Augusto Fiorucci and Francisco Louzada}
 
-\seealso{ \code{\link{bayesDccGarch-package}}, \code{\link{bayesDccGarch}} }
+\seealso{ \code{\link{bayesDccGarch-package}}, \code{\link{bayesDccGarch}}, \code{\link{plot.bayesDccGarch}} }
 
 \examples{
 
@@ -38,7 +38,12 @@ data(DaxCacNik)
 mY = DaxCacNik[1:10,] # more data is necessary
 
 out = bayesDccGarch(mY, nSim=1000)
+
+## The code
 plotVol(mY, out$H[,c("H_1,1","H_2,2","H_3,3")], c("DAX","CAC40","NIKKEI"))
+
+## gives the result of ##
+plot(out)
 
 }
 
