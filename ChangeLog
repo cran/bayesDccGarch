@@ -1,3 +1,17 @@
+Version 2.2 (01 Apr 2021)
+  * fixed an error handling problem. Tests of type "class(try(.))=="try-error" " have been changed to ""try-error" %in% class(try(.))"
+  * updated link to bug report
+  * updated author name and email
+  * updated Rd files
+
+Version 2.1 (25 Nov 2020)
+  * Improved inicialization of matrix Q;
+  * Dynamic Condional Correlation results included;
+  * Predictions of DCC and DCCv included;
+  * Markov Chain of transformed parameters included;
+  * Lamda automatic estimated if algorithm 1 is called;	
+  * Fixed an error in the standard skew t-Student distribution;
+  
 Version 2.0 (29 Jan 2016)
   * Included the 'bayesDccGarch' class;
   * Included S3 functions: plot(), summary(), print() and window();

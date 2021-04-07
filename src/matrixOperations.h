@@ -568,6 +568,5 @@ void RprintMatrix(int n, int p, double **M){
 		Rprintf("\n");	
 	}		
 }
- 
- 
+
 #endif

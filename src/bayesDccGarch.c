@@ -236,8 +236,8 @@ double dsst(double *x, double *gamma, double v, int k, int islog){
 	
 	dk = (double) k;
 	
-	m1 = 2*sqrt(v-2.0)*gammafn(0.5)*gammafn(v/2.0)/((v-1)*gammafn((v+1.0)/2.0));
-	
+	//m1 = 2*sqrt(v-2.0)*gammafn(0.5)*gammafn(v/2.0)/((v-1)*gammafn((v+1.0)/2.0));
+	m1 = 0.5641896*sqrt(v-2.0)*gammafn((v-1)/2) / gammafn( v/2);
 	
 	// termos que nao dependem de i
 	//logDens = dk*log(2.0) + log( gammafn((v+dk)/2.0)/gammafn(v/2.0) ) - dk*log(M_PI*(v-2.0))/2.0;
@@ -290,7 +290,7 @@ double logLikelihood(double *omega, double *alpha, double *beta, double a, doubl
 		
 	// compute the R matrix
 	for(i = 0; i < k; i++){
-		hiit = omega[i];// /(1.0-beta[i]); // H_{ii,1}
+		hiit = ( y[0][i]*y[0][i] + y[1][i]*y[1][i] + y[2][i]*y[2][i] + y[3][i]*y[3][i] + y[4][i]*y[4][i] )/5 ; // omega[i];// /(1.0-beta[i]); // H_{ii,1} // modificado na versao 2.1
 		MEs[i][0]  = y[0][i]/sqrt(hiit);
 		for(t = 1; t < n; t++){
 			hiit = omega[i] + alpha[i]*y[t-1][i]*y[t-1][i] + beta[i]*hiit; // H_{ii,t}
@@ -302,11 +302,11 @@ double logLikelihood(double *omega, double *alpha, double *beta, double a, doubl
 	//*************** Initialization ****************//
 	//  H_{1} and Q_{1} 
 	for(i = 0; i < k; i++){
-		Q[i][i] = (1.0-a-b)*R[i][i];// /(1.0-b);
-		ht1[i] = omega[i];// /(1.0-beta[i]);
-		H[i][i] = ht1[i];
+		Q[i][i] = R[i][i]; //(1.0-a-b)*R[i][i];// /(1.0-b);
+		ht1[i] =  ( y[0][i]*y[0][i] + y[1][i]*y[1][i] + y[2][i]*y[2][i] + y[3][i]*y[3][i] + y[4][i]*y[4][i] )/5; //omega[i];// /(1.0-beta[i]); // modificado na versao 2.1
+ 		H[i][i] = ht1[i];
 		for(j=i+1; j<k; j++){
-			Q[i][j] = (1.0-a-b)*R[i][j];// /(1.0-b);
+			Q[i][j] = R[i][j];// (1.0-a-b)*R[i][j];// /(1.0-b); // modificado na versao 2.1
 			Q[j][i] = Q[i][j];
 			H[i][j] = 0.0; // Note that it is not used
 			H[j][i] = H[i][j]; // Note that it is not used
@@ -866,5 +866,3 @@ void MH_oneBlock( double *phi,
 	_del(mH_actual);
 	// ***************************************************** //
 }
-
- 

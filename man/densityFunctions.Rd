@@ -29,10 +29,10 @@
 
 \value{Returns the computed value of the density.}
 
-\references{Fioruci, J.A., Ehlers, R.S. Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+\references{Fioruci, J.A., Ehlers, R.S. Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014. <doi:10.1080/02664763.2013.839635>
 }
 
-\author{Jose Augusto Fioruci, Ricardo Sandes Ehlers and Francisco Louzada}
+\author{Jose Augusto Fiorucci, Ricardo Sandes Ehlers and Francisco Louzada}
 
 \seealso{ \code{\link{bayesDccGarch-package}} }
 

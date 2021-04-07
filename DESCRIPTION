@@ -1,16 +1,24 @@
 Package: bayesDccGarch
-Version: 2.0
-Date: 2016-01-29
+Version: 2.2
+Date: 2021-04-01
 Title: The Bayesian Dynamic Conditional Correlation GARCH Model
-Description: Bayesian estimation of dynamic conditional correlation GARCH model for multivariate time series volatility (Fioruci, J.A., Ehlers, R.S. and Andrade-Filho, M.G., (2014), DOI:10.1080/02664763.2013.839635).
+Description: Bayesian estimation of dynamic conditional correlation GARCH model for multivariate time series volatility (Fioruci, J.A., Ehlers, R.S. and Andrade-Filho, M.G., (2014). <doi:10.1080/02664763.2013.839635>.
 Depends: R (>= 2.0), numDeriv, coda
-Author: Jose A Fiorucci <jafioruci@gmail.com>, Ricardo S Ehlers <ehlers@icmc.usp.br>, Francisco Louzada <louzada@icmc.usp.br>
-Maintainer: Jose A Fiorucci <jafioruci@gmail.com>
-BugReports: Send an email for <jafioruci@gmail.com> with title
-        'bayesDccGarch Bug'
+Authors@R: c(
+  person("Jose Augusto", "Fiorucci", email="jafiorucci@gmail.com", role=c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-1201-9089")),
+  person("Ricardo", "Sanders Ehlers", email="ehlers@icmc.usp.br", role=c("aut", "cph"), comment = c(ORCID = "0000-0001-9034-5173")),
+  person("Francisco", "Louzada", email="louzada@icmc.usp.br", role=c("aut", "cph"), comment = c(ORCID = "0000-0001-7815-9554"))
+  )
+Author: Jose Augusto Fiorucci [aut, cre, cph]
+    (<https://orcid.org/0000-0002-1201-9089>),
+  Ricardo Sanders Ehlers [aut, cph]
+    (<https://orcid.org/0000-0001-9034-5173>),
+  Francisco Louzada [aut, cph] (<https://orcid.org/0000-0001-7815-9554>)
+Maintainer: Jose Augusto Fiorucci <jafiorucci@gmail.com>
+BugReports: https://github.com/jafiorucci/bayesDccGarch/issues
 License: GPL (>= 2)
-URL: http://arxiv.org/abs/1412.2967
+URL: https://ui.adsabs.harvard.edu/abs/2014arXiv1412.2967F/abstract
 NeedsCompilation: yes
 Repository: CRAN
-Packaged: 2016-02-06 18:31:07 UTC; jafio
-Date/Publication: 2016-02-07 09:28:39
+Packaged: 2021-04-06 18:33:27 UTC; jafio
+Date/Publication: 2021-04-07 13:20:10 UTC

@@ -1,9 +1,10 @@
 importFrom("graphics", "lines", "par")
 importFrom("stats", "cov", "optim", "rnorm", "ts.plot", "window")
 importFrom("numDeriv","hessian")
+importFrom("utils", "tail")
 import("coda")
 export(dssnorm,dssged,dsst,bayesDccGarch,increaseSim,logLikDccGarch,plotVol,plot.bayesDccGarch)
-useDynLib(bayesDccGarch)
+useDynLib(bayesDccGarch, .registration = TRUE)
 
 S3method(plot,bayesDccGarch)
 S3method(print,bayesDccGarch)

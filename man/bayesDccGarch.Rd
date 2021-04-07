@@ -14,8 +14,8 @@
 
 \usage{
 bayesDccGarch(mY, nSim = 10000, tail_ini = 8, omega_ini = rep(0.03, ncol(mY)), 
-	alpha_ini = rep(0.03, ncol(mY)), beta_ini = rep(0.8, ncol(mY)), 
-	a_ini = 0.03, b_ini = 0.8, gamma_ini = rep(1, ncol(mY)), 
+	alpha_ini = rep(0.04, ncol(mY)), beta_ini = rep(0.8, ncol(mY)), 
+	a_ini = 0.04, b_ini = 0.8, gamma_ini = rep(1, ncol(mY)), 
 	errorDist = 2, control = list())
 	
 increaseSim(x, nSim=10000)
@@ -82,14 +82,17 @@ An object of \code{bayesDccGarch} class, which contains a list with elements:
 \item{$control }{ a list with the used \code{control} argument. }
 \item{$MC }{ a element of \code{mcmc} class with the Markov Chain simulation of all parameters. (\R package \pkg{coda})}
 \item{$H }{ a matrix with the Bayesian estimates of volatilities and co-volatilities.}
+\item{$R }{ a matrix with the estimates of the dynamic coditional correlation.}
+\item{$H_n1 }{ Bayesian prediction of volatilities and co-volatilities for y_{n+1}.}
+\item{$R_n1 }{ Bayesian prediction of coditional correlation for y_{n+1}.}
 \item{$IC }{ the Bayesian estimate of Akaike Information Criterion, Bayesian Information Criterion and Deviance Information Criterion.}
 \item{$elapsedTime }{ an object of class \code{proc_time} which is a numeric vector of length 5, containing the user, system, and total elapsed times of the process.}
 }
 
 \references{
-Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014a. \url{http://dx.doi.org/10.1080/02664763.2013.839635}.
+Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. \emph{Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions}, Journal of Applied Statistics, 41(2), 320--331, 2014a. <doi:10.1080/02664763.2013.839635>
 
-Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation of Multivariate GARCH DCC Models}, ArXiv e-prints, 2014b. \url{http://adsabs.harvard.edu/abs/2014arXiv1412.2967F}.
+Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation of Multivariate GARCH DCC Models}, ArXiv e-prints, 2014b. \url{https://ui.adsabs.harvard.edu/abs/2014arXiv1412.2967F/abstract}.
 }
 
 \author{Jose Augusto Fiorucci, Ricardo Sandes Ehlers and Francisco Louzada}
@@ -97,46 +100,31 @@ Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation
 \seealso{ \code{\link{bayesDccGarch-package}}, \code{\link{logLikDccGarch}}, \code{\link{plot}}, \code{\link{plotVol}} }
 
 \examples{
+ 
+\donttest{
 
-data(DaxCacNik)  
-Dax = DaxCacNik[,1]
+data(DaxCacNik) 
 
 ### DCC-GARCH(1,1) ###
-out = bayesDccGarch(DaxCacNik[1:10,], nSim=1000) # more data is necessary
+out1 = bayesDccGarch(DaxCacNik)
+out2 = increaseSim(out1, 30000)   # more 30000 simulations
+out3 = window(out2, start=5000, thin = 10) #remove first 5000 and take at intervals of 10
+summary(out3)
+
+# Plotting volatilities
+plot(out3)
+
+# Plotting Markov Chain
+plot(out3$MC)
+
+### univariate GARCH(1,1) ###
+Dax = DaxCacNik[,1]
+out = bayesDccGarch(Dax)
 summary(out)
 plot(out) 
 
+}
 
-### GARCH(1,1) ###
-# out = bayesDccGarch(Dax)
-# summary(out)
-# plot(out) 	
-
-
-### DCC-GARCH(1,1) with SSGED innovations ###
-## out = bayesDccGarch(DaxCacNik, tail_ini=1.5, errorDist=3)
-
-
-### Informative Prior for alpha and beta parameters ###
-# out = bayesDccGarch(Dax, alpha_ini=0.01, beta_ini=0.90, 
-#	control=list(mu_alpha=0.01, sigma_alpha=0.001, mu_beta=0.90, sigma_beta=0.001))
-# summary(out)
-# plot(out$MC) ## plot Markov Chain
-# plot(out) 	
-
-### more simulations ###################################
-# out1 = bayesDccGarch(DaxCacNik)
-# out2 = increaseSim(out, 10000) # more 10000 simulations
-# out3 = window(out2, start=5000)  # removing the first 5000 as burning
-# summary(out3)
-#
-### Plotting volatilities #
-# plot(out3)
-#
-### Plotting Markov Chain #
-# plot(out3$MC)
-#
-########################################################
 }
 
 \keyword{ts}

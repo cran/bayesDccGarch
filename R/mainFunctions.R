@@ -98,6 +98,34 @@ updateBayesDccGarch <- function(x){
   x$H = matrix(out$vmMeanH, ncol=ncol(mY)^2, byrow=T)
   colnames(x$H) = Hname 
   
+  ### Predicted Co-Volatilities and Correlation matrix for y_{n+1}
+  H_n1 <- matrix( tail(logLikDccGarch(rbind(mY,rep(0,ncol(mY))), omega_est, alpha_est, beta_est, a_est, b_est, gamma_est, tail_est, x$control$errorDist)$H,1), k, k )
+  colnames(H_n1) = rownames(H_n1) = colnames(mY)
+  R_n1 <- H_n1
+
+  ### Compute R matrix and R_n1
+  DCC <- matrix(NA, nrow = nrow(x$H), ncol=ncol(x$H)) ### Dynamic Conditional Correlation 
+  colnames(DCC) = colnames(x$H)
+
+  for(i in 1:k){
+	col_i_name <- paste0("H_",i,",",i)
+	
+	 for(j in 1:k){
+		col_j_name <- paste0("H_",j,",",j)
+		
+		col_ij_name <- paste0("H_",i,",",j)
+		
+		DCC[,col_ij_name] <- x$H[,col_ij_name] / (sqrt(x$H[,col_i_name]) * sqrt(x$H[,col_j_name]))
+		
+		R_n1[i,j] <- H_n1[i,j]/(sqrt(H_n1[i,i])*sqrt(H_n1[j,j]))
+	 }	
+  }
+  
+  colnames(DCC) <- colnames(x$R)
+  x$R <- DCC
+  x$H_n1 <- H_n1
+  x$R_n1 <- R_n1
+  
   #x$logLike = out$meanLogLike
   
   return(x)
@@ -135,7 +163,7 @@ MH_oneBlock <- function(phi_ini, k, n_sim, chol_cov_phi_sim){
 }
 
 
-bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(mY)), alpha_ini=rep(0.03, ncol(mY)), beta_ini=rep(0.8, ncol(mY)), a_ini=0.03, b_ini=0.8, gamma_ini=rep(1.0, ncol(mY)), errorDist=2, control=list() )
+bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(mY)), alpha_ini=rep(0.04, ncol(mY)), beta_ini=rep(0.8, ncol(mY)), a_ini=0.04, b_ini=0.8, gamma_ini=rep(1.0, ncol(mY)), errorDist=2, control=list() )
 {
 	ptm <- proc.time()
 	
@@ -149,7 +177,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 	 
 	Lout = try( logLikDccGarch(mY, omega_ini, alpha_ini, beta_ini, a_ini, b_ini, gamma_ini, tail_ini, errorDist) ) 
     
-	if(class(Lout)=="try-error") stop("The likelihood function can not be computed for the initial values.")
+	if("try-error" %in% class(Lout)) stop("The likelihood function can not be computed for the initial values.")
 	if(!is.list(control)) stop("control must be an object of list class.")
 	if(is.null(control$data)){ control$data = mY }
 	if(is.null(control$errorDist)){ control$errorDist = errorDist }
@@ -183,7 +211,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 		if(length(control$sdSim)!=npar) stop("control$sdSim must be a numeric positive vector with length 5 if k=1 or 4k+3 if k>1, where 'k=ncol(mY)'")
 	}
 	if(control$simAlg == 3){ if(k==1){control$sdSim = c(0.2, 0.2, 0.4, 0.4, 0.2) }else{control$sdSim = c(0.2, rep(c(0.2, 0.4, 0.4, 0.2), k), 1.0, 1.5)} }
-	if(is.null(control$lambda)){control$lambda = 0.5}
+	if(is.null(control$lambda)){control$lambda = 0.4}
 	if(is.null(control$nPilotSim)){control$nPilotSim = 1000}
 
     
@@ -232,7 +260,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 				# }
 			# }
 			
-			if( class(control$cholCov) != "try-error"){
+			if( !("try-error" %in% class(control$cholCov)) ){ #if( class(control$cholCov) != "try-error"){
 				option = 1
 			}else{
 				writeLines("One approximation for covariance matrix of parameters cannot be directly computed through the hessian matrix.")   
@@ -249,7 +277,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
         if(option==1 && control$simAlg!=2){
             #writeLines("\nStarting the first simulation option")
 			
-			if(control$simAlg==3){
+			#if(control$simAlg==3){
 				writeLines("Calibrating the Lambda coefficient:")
 				
 				cont=1
@@ -269,7 +297,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 				}
 				
 				writeLines("Done.")
-            }
+            #}
 			
             writeLines("Starting the simulation by one-block random walk Metropolis-Hasting algorithm.")
             MC_phi = MH_oneBlock(phi_ini, k, n_sim=nSim, control$lambda*control$cholCov)  
@@ -310,7 +338,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 				
 				writeLines("Computing the covariance matrix of pilot sample.")
 				control$cholCov = try( t( chol( cov(MC_phi) ) ) , silent = TRUE )
-				if( class(control$cholCov) != "try-error"){
+				if( !("try-error" %in% class(control$cholCov)) ){  #if( class(control$cholCov) != "try-error"){
 					writeLines("Done.")
 					option = 1
 				}else{
@@ -318,7 +346,8 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 					writeLines("The approximately covariance matrix is not positive definitely.")
 					option = 2
 				}
-            }
+				
+      }
 			
 			if(option == 2){
 				writeLines("Starting the simulation by one-dimensional random walk Metropolis-Hasting algorithm.")
@@ -334,8 +363,13 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 	vMMeanH = .C("getMeanH", vMMeanH= numeric(n*k*k) )$vMMeanH
 	mMeanH = matrix(vMMeanH,nrow=n,ncol=k*k,byrow=TRUE)
 	
-	name = rep("NA", k*k)
-	for(i in 1:k){ for(j in 1:k){ name[(i-1)*k + j] = paste("H_",i,",",j,sep="") } }
+	name = name2 =rep("NA", k*k)
+	for(i in 1:k){ 
+		for(j in 1:k){ 
+			name[(i-1)*k + j] = paste("H_",i,",",j,sep="") 
+			name2[(i-1)*k + j] = paste("R_",i,",",j,sep="") 
+		} 
+	}
 	colnames(mMeanH) = name
 	
 	logLike_mean = .C("getLogLikelihood_mean", value=numeric(1))$value
@@ -343,7 +377,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
     
 	memoryDeallocation()	
 	
-    
+	### Parameters inverse transformation
 	name = rep("NA", npar)
     MC = matrix(NA, nrow=nSim, ncol=npar)
     if( errorDist==1 || errorDist==3){
@@ -364,7 +398,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
     }
     colnames(MC) = name
     
-	
+	### Compute criteria informations
 	D_mean = -2*logLike_mean
 	par_est = apply(X=MC, MARGIN=2, FUN=mean)
 	tail_est = par_est[1]; gamma_est = par_est[2+ 4*(0:(k-1))]; omega_est = par_est[3+ 4*(0:(k-1))];
@@ -384,16 +418,43 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=rep(0.03, ncol(m
 	
 	IC = matrix(c(EAIC, EBIC, DIC), nrow=3, ncol=1)
 	rownames(IC) = c("EAIC", "EBIC", "DIC")	
-	colnames(IC) = c("Estimative") 
+	colnames(IC) = c("Estimative")
+
+	### Predicted Co-Volatilities and Correlation matrix for y_{n+1}
+	H_n1 <- matrix( tail(logLikDccGarch(rbind(mY,rep(0,ncol(mY))), omega_est, alpha_est, beta_est, a_est, b_est, gamma_est, tail_est, errorDist)$H,1), k, k )
+	colnames(H_n1) = rownames(H_n1) = colnames(mY)
+	R_n1 <- H_n1
 	
+	### Compute R matrix and R_n1
+	DCC <- matrix(NA, nrow = nrow(mMeanH), ncol=ncol(mMeanH)) ### Dynamic Conditional Correlation 
+	colnames(DCC) = colnames(mMeanH)
+
+	for(i in 1:k){
+		col_i_name <- paste0("H_",i,",",i)
+		
+		for(j in 1:k){
+			col_j_name <- paste0("H_",j,",",j)
+			
+			col_ij_name <- paste0("H_",i,",",j)
+			
+			DCC[,col_ij_name] <- mMeanH[,col_ij_name] / (sqrt(mMeanH[,col_i_name]) * sqrt(mMeanH[,col_j_name]))
+			
+			R_n1[i,j] <- H_n1[i,j]/(sqrt(H_n1[i,i])*sqrt(H_n1[j,j]))
+		}	
+	}
+	colnames(DCC) = name2
 	
     out = list()
 	out$control = control
     out$MC = as.mcmc(MC)
-	out$H = mMeanH 
+	out$MC_phi = as.mcmc(MC_phi)
+	out$H = mMeanH
+	out$R = DCC
+	out$H_n1 = H_n1
+	out$R_n1 = R_n1	
 	out$IC = IC
-    out$elapsedTime = proc.time() - ptm
 	# out$logLike = logLike_mean
+    out$elapsedTime = proc.time() - ptm
 	
     return(structure(out,class="bayesDccGarch"))
 }
@@ -423,8 +484,12 @@ increaseSim <- function(x, nSim=10000)
   outNewSim = bayesDccGarch(control$data, nSim, tail_ini, omega_ini, alpha_ini, beta_ini, a_ini, b_ini, gamma_ini, control$errorDist, control)
   
   x$H = (nMC*x$H + nSim*outNewSim$H)/(nMC + nSim)
+  x$R = (nMC*x$R + nSim*outNewSim$R)/(nMC + nSim)
+  x$H_n1 = (nMC*x$H_n1 + nSim*outNewSim$H_n1)/(nMC + nSim)
+  x$R_n1 = (nMC*x$R_n1 + nSim*outNewSim$R_n1)/(nMC + nSim)
   x$IC = (nMC*x$IC + nSim*outNewSim$IC)/(nMC + nSim)
   x$MC = as.mcmc( rbind(x$MC, outNewSim$MC) )
+  x$MC_phi = as.mcmc( rbind(x$MC_phi, outNewSim$MC_phi) )
   x$elapsedTime = x$elapsedTime + outNewSim$elapsedTime
   
   return(x)
@@ -438,6 +503,7 @@ window.bayesDccGarch <- function(x, start = NULL, end = NULL, thin = NULL,...){
 	if(is.null(thin)){thin = 1}
 
 	x$MC = window(as.mcmc(x$MC), start = start, end = end, thin = thin,...)
+	x$MC_phi = window(as.mcmc(x$MC_phi), start = start, end = end, thin = thin,...)
 	
 	return( updateBayesDccGarch(x) )
 }
@@ -455,6 +521,9 @@ plotVol <- function(mY, vol, ts.names=paste("TS_", 1:ncol(mY), sep=""), colors =
   
   n = nrow(mY)
   k = ncol(mY)
+  
+  oldpar <- par(no.readonly = TRUE)    # code line i
+  on.exit(par(oldpar))            # code line i + 1
   
   par(mfrow=c(k,1), mar= c(4, 4, 2, 2))
   for(i in 1:k){
