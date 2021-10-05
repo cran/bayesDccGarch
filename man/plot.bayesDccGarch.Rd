@@ -29,12 +29,14 @@ Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation
 
 \examples{
 
+\donttest{
 data(DaxCacNik)
 
-mY = DaxCacNik[1:10,] # more data is necessary
+mY = DaxCacNik
 
 out = bayesDccGarch(mY, nSim=1000)
 plot(out)
+}
 
 }
 

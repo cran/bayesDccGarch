@@ -35,17 +35,20 @@ Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation
 
 \examples{
 
+\donttest{
 data(DaxCacNik)
 
-mY = DaxCacNik[1:10,] # more data is necessary
+mY = DaxCacNik
 
-out = bayesDccGarch(mY, nSim=1000)
+out = bayesDccGarch(mY)
 
 ## The code
 plotVol(mY, out$H[,c("H_1,1","H_2,2","H_3,3")], c("DAX","CAC40","NIKKEI"))
 
 ## gives the result of ##
 plot(out)
+
+}
 
 }
 

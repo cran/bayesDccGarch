@@ -3,12 +3,12 @@
 \docType{package}
 
 \title{
-	bayesDccGARCH: Methods and tools for Bayesian analysis of DCC-GARCH(1,1) Model. 
+	bayesDccGARCH: Methods and tools for Bayesian analysis of DCC-GARCH(1,1) Model.
 }
 
 \description{
-	In this package we implemented functions for Bayesian analysis of DCC-GARCH(1,1) Model using the same modelling of Fioruci et al (2014a). 
-	Several probabilities distributions are available for the errors which can model both skewness and heavy tails. 
+	In this package we implemented functions for Bayesian analysis of DCC-GARCH(1,1) Model using the same modelling of Fioruci et al (2014a).
+	Several probabilities distributions are available for the errors which can model both skewness and heavy tails.
 	See Fioruci et al (2014b) for more details about the package.
 }
 
@@ -16,11 +16,11 @@
 	\tabular{ll}{
 		Package: \tab bayesDccGarch\cr
 		Type: \tab Package\cr
-		Version: \tab 2.2\cr
-		Date: \tab 2021-04-01\cr
+		Version: \tab 3.0.3\cr
+		Date: \tab 2021-10-02\cr
 		License: \tab GPL (>=2.14) \cr
     }
-	
+
 	\code{bayesDccGarch(mY, n_sim = 10000)}
 }
 
@@ -44,13 +44,13 @@ Fioruci, J.A., Ehlers, R.S., Louzada, F. \emph{BayesDccGarch - An Implementation
 
 \seealso{
 Available functions:
-\code{\link{bayesDccGarch}}, \code{\link{logLikDccGarch}}, \code{\link{dssnorm}}, \code{\link{dsst}}, \code{\link{dssged}}, \code{\link{plot}}, \code{\link{plotVol}}
+\code{\link{bayesDccGarch}}, \code{\link{update}}, \code{\link{predict}}, \code{\link{plot}}, \code{\link{logLikDccGarch}}, \code{\link{dssnorm}}, \code{\link{dsst}}, \code{\link{dssged}}, \code{\link{plotVol}}
 }
 
 \examples{
 
 \donttest{
-data(DaxCacNik) 
+data(DaxCacNik)
 
 out = bayesDccGarch(DaxCacNik)
 
