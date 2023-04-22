@@ -1,7 +1,7 @@
 Version 3.0 (01 Oct 2021)
   * Included S3 functions: update() and predict()
   * Improved inicialization of H;
-  * Improved inicialization of parameters omega, alpha and beta;
+  * Changed default inicialization of parameters omega, alpha and beta;
 
 Version 2.2 (01 Apr 2021)
   * fixed an error handling problem. Tests of type "class(try(.))=="try-error" " have been changed to ""try-error" %in% class(try(.))"

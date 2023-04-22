@@ -9,6 +9,6 @@ See Fioruci et al (2014b) for more details about the package.
 Jose Augusto Fiorucci, Ricardo Sandes Ehlers and Francisco Louzada. Maintainer: Jose Augusto Fiorucci <jafiorucci@gmail.com>
 
 ## References
-Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions, Journal of Applied Statistics, 41(2), 320–331, 2014a.
+Fioruci, J.A., Ehlers, R.S., Andrade Filho, M.G. Bayesian multivariate GARCH models with dynamic correlations and asymmetric error distributions, Journal of Applied Statistics, 41(2), 320–331, 2014a, <doi:10.1080/02664763.2013.839635>.
 
-Fioruci, J.A., Ehlers, R.S., Louzada, F. BayesDccGarch - An Implementation of Multivariate GARCH DCC Models, ArXiv e-prints, 2014b.
+Fioruci, J.A., Ehlers, R.S., Louzada, F. BayesDccGarch - An Implementation of Multivariate GARCH DCC Models, ArXiv e-prints, 2014b. https://ui.adsabs.harvard.edu/abs/2014arXiv1412.2967F/abstract

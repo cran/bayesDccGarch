@@ -463,7 +463,7 @@ bayesDccGarch <- function(mY, nSim=10000, tail_ini=8, omega_ini=0.1*diag(var(mY)
 
 increaseSim <- function(x, nSim=10000)
 {
-  if(class(x) != "bayesDccGarch"){ stop("Error: argument x is not one element of 'bayesDccGarch' class") }
+  if( !("bayesDccGarch" %in% class(x)) ){ stop("Error: argument x is not one element of 'bayesDccGarch' class") }
   control = x$control
   k = ncol(control$data)
   nMC = nrow(x$MC)
@@ -497,7 +497,7 @@ increaseSim <- function(x, nSim=10000)
 }
 
 window.bayesDccGarch <- function(x, start = NULL, end = NULL, thin = NULL,...){
-	if(class(x) != "bayesDccGarch"){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
+	if( !("bayesDccGarch" %in% class(x)) ){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
 	nMC = nrow(x$MC)
 	if(is.null(start)){start = 1}
 	if(is.null(end)){end = nMC}
@@ -582,7 +582,7 @@ plot.bayesDccGarch <- function(x, ts.names=NULL, colors = c("grey","red"), ...){
 ## included in version 2.3
 update.bayesDccGarch <- function(object,..., mY_new){
   x = object
-  if(class(x) != "bayesDccGarch"){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
+  if( !("bayesDccGarch" %in% class(x)) ){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
   mY_new = as.matrix(mY_new)
   mY = rbind(x$control$data, mY_new)
   x$control$data = mY
@@ -606,9 +606,9 @@ update.bayesDccGarch <- function(object,..., mY_new){
 #' out = bayesDccGarch(DaxCacNik)
 #' predict.bayesDccGarch(out, n_ahead=5)
 #' }
-predict.bayesDccGarch <- function(object,..., n_ahead=5, bayes=F){
+predict.bayesDccGarch <- function(object,..., n_ahead=5, bayes=T){
   x = object
-  if(class(x) != "bayesDccGarch"){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
+  if( !("bayesDccGarch" %in% class(x)) ){ stop("Error: argument x is not a element of 'bayesDccGarch' class") }
   mY = x$control$data
   n = nrow(mY)
   k = ncol(mY)

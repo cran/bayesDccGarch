@@ -2,7 +2,7 @@ Package: bayesDccGarch
 Type: Package
 Title: Methods and Tools for Bayesian Dynamic Conditional Correlation
         GARCH(1,1) Model
-Version: 3.0.3
+Version: 3.0.4
 Author: Jose Augusto Fiorucci [aut, cre, cph]
     (<https://orcid.org/0000-0002-1201-9089>),
   Ricardo Sanders Ehlers [aut, cph]
@@ -23,6 +23,6 @@ BugReports: https://github.com/jafiorucci/bayesDccGarch/issues
 URL: https://ui.adsabs.harvard.edu/abs/2014arXiv1412.2967F/abstract
 NeedsCompilation: yes
 RoxygenNote: 7.1.2
-Packaged: 2021-10-05 14:06:54 UTC; jafio
+Packaged: 2023-04-22 01:56:01 UTC; jafio
 Repository: CRAN
-Date/Publication: 2021-10-05 14:20:02 UTC
+Date/Publication: 2023-04-22 07:20:02 UTC

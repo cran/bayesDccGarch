@@ -45,7 +45,7 @@ void getLogLikelihood_mean(double *value){
 	value[0] = logLikelihood_mean;
 }
 
-void printGlobalMatrix(){
+void printGlobalMatrix( void ){
 	Rprintf("\n\ny:\n");
 	RprintMatrix(n, k, y);
 
@@ -107,7 +107,7 @@ void printGlobalMatrix(){
 	RprintVector(1, sigma_b);
 }
 
-void zeroGlobalMatrix(){
+void zeroGlobalMatrix( void ){
 	mat_zero(H, k);
 	mat_zero(cholH, k);
 	mat_zero(cholH1, k);
@@ -169,7 +169,7 @@ void memoryAllocation(double *vY,
 }
 
 
-void memoryDeallocation(){
+void memoryDeallocation( void ){
 	_del(H); _del(Q); _del(R);
 	_del(cholH);
 	_del(cholH1);
@@ -279,7 +279,7 @@ double logLikelihood(double *omega, double *alpha, double *beta, double a, doubl
 	double hiit;
 	double z[k]; // z_t^* vector
 	double value=0.0;
-	double Inf = 999999999999999999;
+	double Inf = 999999999999999999.9;
 	double logDetH;
 
 	mat_zero(H, k);
@@ -478,7 +478,7 @@ double logPosterior(double *omega, double *alpha, double *beta, double a, double
 	int i;
 	double logLik, logPrior=0.0;
 
-	double Inf = 999999999999999999;
+	double Inf = 999999999999999999.9;
 
 	if(a+b>0.989) return -Inf;
 	for(i = 0; i < k; i++)
@@ -749,7 +749,7 @@ void MH_oneDimension(double *phi,
 	// ***************************************************** //
 }
 
-void rMultNorm(double *mean, mat chol_cov, double *out, _dim){
+void rMultNorm(double *mean, mat chol_cov, double *out, dim_){
 	double z[n];
 
 	for_i{	GetRNGstate(); z[i] = norm_rand(); PutRNGstate(); }

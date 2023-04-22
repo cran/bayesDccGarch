@@ -5,7 +5,7 @@
 \alias{predict}
 \title{Bayesian forecast for volatilities and coditional correlations}
 \usage{
-\method{predict}{bayesDccGarch}(object, ..., n_ahead = 5, bayes = F)
+\method{predict}{bayesDccGarch}(object, ..., n_ahead = 5, bayes = T)
 }
 \arguments{
 \item{object}{a bayesDccGarch object}
